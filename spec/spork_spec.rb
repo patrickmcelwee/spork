@@ -91,6 +91,10 @@ describe Spork do
           def say_something!
             TrapTest.output << 'something'
           end
+
+          def a_setter=(value)
+            TrapTest.output << value
+          end
         end
       end
       @trap_test = TrapTest.new
@@ -115,6 +119,14 @@ describe Spork do
       TrapTest.output.should == []
       Spork.exec_each_run
       TrapTest.output.should == ['something']
+    end
+
+    it "works with setter methods" do
+      Spork.trap_method(TrapTest, :a_setter=)
+      @trap_test.a_setter = 'I wrote this'
+      TrapTest.output.should == []
+      Spork.exec_each_run
+      TrapTest.output.should == ['I wrote this']
     end
   end
   

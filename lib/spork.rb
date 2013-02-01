@@ -114,8 +114,12 @@ module Spork
       end
 
       def alias_method_names(method_name, feature)
-        /^(.+?)([\?\!]{0,1})$/.match(method_name.to_s)
+        /^(.+?)([\?\!]{0,1})$/.match(escaped(method_name))
         ["#{$1}_without_spork#{$2}", "#{$1}_with_spork#{$2}"]
+      end
+
+      def escaped(method_name)
+        method_name.to_s.sub('=', '_equals')
       end
       
       def already_ran
